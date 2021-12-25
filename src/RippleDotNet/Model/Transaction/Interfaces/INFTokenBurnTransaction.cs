@@ -2,12 +2,9 @@
 
 namespace RippleDotNet.Model.Transaction.Interfaces
 {
-    public interface INFTokenMintTransaction : ITransactionCommon
+    public interface INFTokenBurnTransaction : ITransactionCommon
     {
-        new NFTokenMintFlags? Flags { get; set; }
-        uint? TokenTaxon { get; set; }
-        string Issuer { get; set; }
-        uint? TransferFee { get; set; }
-        string URI { get; set; }
+        //string Issuer { get; set; } // INHEIRTED FROM COMMON
+        string TokenID { get; set; }
     }
 }

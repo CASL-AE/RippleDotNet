@@ -1,7 +1,7 @@
 ﻿namespace RippleDotNet.Model.Transaction.Interfaces
 {
-    public interface IOfferCancelTransaction : ITransactionCommon
+    public interface INFTokenCancelOfferTransaction : ITransactionCommon
     {
-        uint OfferSequence { get; set; }
+        string[] TokenOffers { get; set; }
     }
 }

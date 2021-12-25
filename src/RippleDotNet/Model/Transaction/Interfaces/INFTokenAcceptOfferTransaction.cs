@@ -2,12 +2,8 @@
 
 namespace RippleDotNet.Model.Transaction.Interfaces
 {
-    public interface IOfferCreateTransaction : ITransactionCommon
+    public interface INFTokenAcceptOfferTransaction : ITransactionCommon
     {
-        DateTime? Expiration { get; set; }
-        new OfferCreateFlags? Flags { get; set; }
-        uint? OfferSequence { get; set; }
-        Currency TakerGets { get; set; }
-        Currency TakerPays { get; set; }
+        string TokenID { get; set; }
     }
 }

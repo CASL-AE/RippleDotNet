@@ -1,7 +1,14 @@
-﻿namespace RippleDotNet.Model.Transaction.Interfaces
+﻿using System;
+
+namespace RippleDotNet.Model.Transaction.Interfaces
 {
-    public interface IOfferCancelTransaction : ITransactionCommon
+    public interface INFTokenCreateOfferTransaction : ITransactionCommon
     {
-        uint OfferSequence { get; set; }
+        DateTime? Expiration { get; set; }
+        new NFTokenCreateOfferFlags? Flags { get; set; }
+        string TokenID { get; set; }
+        string Amount { get; set; }
+        string Owner { get; set; }
+        string Destination { get; set; }
     }
 }

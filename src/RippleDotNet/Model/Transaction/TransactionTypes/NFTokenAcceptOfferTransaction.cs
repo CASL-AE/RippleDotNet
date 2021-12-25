@@ -5,11 +5,11 @@ using RippleDotNet.Model.Transaction.Interfaces;
 
 namespace RippleDotNet.Model.Transaction.TransactionTypes
 {
-    public class NFTokenBurnTransaction : TransactionCommon, INFTokenBurnTransaction
+    public class NFTokenAcceptOfferTransaction : TransactionCommon, INFTokenAcceptOfferTransaction
     {
-        public NFTokenBurnTransaction()
+        public NFTokenAcceptOfferTransaction()
         {
-            TransactionType = TransactionType.NFTokenBurn;
+            TransactionType = TransactionType.NFTokenAcceptOffer;
         }
 
         //public string Account { get; set; } // INHEIRTED FROM COMMON

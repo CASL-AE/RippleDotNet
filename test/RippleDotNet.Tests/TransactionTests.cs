@@ -24,20 +24,25 @@ namespace RippleDotNet.Tests
     public class TransactionTests
     {
         private static IRippleClient client;
+        private static IRippleClient xls20client;
         private static JsonSerializerSettings serializerSettings;
 
         private static string serverUrl = "wss://s.altnet.rippletest.net:51233";
-        
-        
+        private static string xls20Url = "wss://xls20-sandbox.rippletest.net:51233";
+
+
         //private static string serverUrl = "wss://s1.ripple.com:443";
         //private static string serverUrl = "wss://s2.ripple.com:443";
-        
-        
+
+
         [ClassInitialize]
         public static void MyClassInitialize(TestContext testContext)
         {
             client = new RippleClient(serverUrl);
             client.Connect();
+
+            xls20client = new RippleClient(xls20Url);
+            xls20client.Connect();
 
             serializerSettings = new JsonSerializerSettings();
             serializerSettings.NullValueHandling = NullValueHandling.Ignore;
@@ -369,7 +374,125 @@ namespace RippleDotNet.Tests
             Assert.IsNotNull(result);
             Assert.AreEqual("tesSUCCESS", result.EngineResult);
             Assert.IsNotNull(result.Transaction.Hash);
-        }        
+        }
+
+        // NFT Functions
+
+        // Address: rv2pHEbfVtU4UA5ES8CKD2RckEqhWwfL7
+        // Seed: shqqJc2dqXzB6dEhLDBrVRBPkUQVd
+
+        // Address: rK6x1tM8nsrLzFRk3tAJ4TZMYKectAgEmr
+        // Seed: sh2eEdA9XK2QzsyXwX7hNGzqoY6zs
+
+        [TestMethod]
+        public async Task CanMintToken()
+        {
+
+            AccountInfo accountInfo = await xls20client.AccountInfo("rv2pHEbfVtU4UA5ES8CKD2RckEqhWwfL7");
+
+            INFTokenMintTransaction mintToken = new NFTokenMintTransaction();
+            mintToken.Sequence = accountInfo.AccountData.Sequence;
+            mintToken.TokenTaxon = 0;
+            //mintToken.Issuer = "";
+            mintToken.TransferFee = 0;
+            mintToken.URI = "ipfs://";
+            mintToken.Account = "rv2pHEbfVtU4UA5ES8CKD2RckEqhWwfL7";
+
+            var json = mintToken.ToJson();
+            TxSigner signer = TxSigner.FromSecret("shqqJc2dqXzB6dEhLDBrVRBPkUQVd");
+            System.Diagnostics.Debug.WriteLine(signer.ToString());
+            SignedTx signedTx = signer.SignJson(JObject.Parse(json));
+
+            SubmitBlobRequest request = new SubmitBlobRequest();
+            request.TransactionBlob = signedTx.TxBlob;
+
+            Submit result = await xls20client.SubmitTransactionBlob(request);
+            Assert.IsNotNull(result);
+            Assert.AreEqual("tesSUCCESS", result.EngineResult);
+            Assert.IsNotNull(result.Transaction.Hash);
+
+        }
+
+        //[TestMethod]
+        //public async Task CanBurnToken()
+        //{
+
+        //    AccountInfo accountInfo = await xls20client.AccountInfo("rwEHFU98CjH59UX2VqAgeCzRFU9KVvV71V");
+
+        //    INFTokenBurnTransaction mintBurn = new NFTokenBurnTransaction();
+        //    mintBurn.Sequence = accountInfo.AccountData.Sequence;
+        //    mintBurn.TokenID = "1";
+        //    mintBurn.Account = "rwEHFU98CjH59UX2VqAgeCzRFU9KVvV71V";
+
+        //    var json = mintBurn.ToJson();
+        //    TxSigner signer = TxSigner.FromSecret("xxxxxxx");
+        //    SignedTx signedTx = signer.SignJson(JObject.Parse(json));
+
+        //    SubmitBlobRequest request = new SubmitBlobRequest();
+        //    request.TransactionBlob = signedTx.TxBlob;
+
+        //    Submit result = await xls20client.SubmitTransactionBlob(request);
+        //    Assert.IsNotNull(result);
+        //    Assert.AreEqual("tesSUCCESS", result.EngineResult);
+        //    Assert.IsNotNull(result.Transaction.Hash);
+
+        //}
+
+        //[TestMethod]
+        //public async Task CanSetOfferOnToken()
+        //{
+
+        //    AccountInfo accountInfo = await client.AccountInfo("rwEHFU98CjH59UX2VqAgeCzRFU9KVvV71V");
+
+        //    INFTokenCreateOfferTransaction offerCreate = new NFTokenCreateOfferTransaction();
+        //    offerCreate.Sequence = accountInfo.AccountData.Sequence;
+        //    offerCreate.TokenID = "1";
+        //    offerCreate.Amount = "100";
+        //    offerCreate.Owner = "";
+        //    offerCreate.Destination = "rEqtEHKbinqm18wQSQGstmqg9SFpUELasT";
+        //    offerCreate.Expiration = DateTime.UtcNow.AddHours(1);
+        //    offerCreate.Account = "rwEHFU98CjH59UX2VqAgeCzRFU9KVvV71V";
+
+        //    var json = offerCreate.ToJson();
+        //    TxSigner signer = TxSigner.FromSecret("xxxxxxx");
+        //    SignedTx signedTx = signer.SignJson(JObject.Parse(json));
+
+        //    SubmitBlobRequest request = new SubmitBlobRequest();
+        //    request.TransactionBlob = signedTx.TxBlob;
+
+        //    Submit result = await xls20client.SubmitTransactionBlob(request);
+        //    Assert.IsNotNull(result);
+        //    Assert.AreEqual("tesSUCCESS", result.EngineResult);
+        //    Assert.IsNotNull(result.Transaction.Hash);
+
+        //}
+
+        //[TestMethod]
+        //public async Task CanCancelOfferOnToken()
+        //{
+
+        //    AccountInfo accountInfo = await client.AccountInfo("rwEHFU98CjH59UX2VqAgeCzRFU9KVvV71V");
+
+        //    IOfferCreateTransaction offerCreate = new OfferCreateTransaction();
+        //    offerCreate.Sequence = accountInfo.AccountData.Sequence;
+        //    offerCreate.TakerGets = new Currency { ValueAsXrp = 10 };
+        //    offerCreate.TakerPays = new Currency { CurrencyCode = "XYZ", Issuer = "rEqtEHKbinqm18wQSQGstmqg9SFpUELasT", Value = "10" };
+        //    offerCreate.Expiration = DateTime.UtcNow.AddHours(1);
+        //    offerCreate.Account = "rwEHFU98CjH59UX2VqAgeCzRFU9KVvV71V";
+
+        //    var json = offerCreate.ToJson();
+        //    TxSigner signer = TxSigner.FromSecret("xxxxxxx");
+        //    SignedTx signedTx = signer.SignJson(JObject.Parse(json));
+
+        //    SubmitBlobRequest request = new SubmitBlobRequest();
+        //    request.TransactionBlob = signedTx.TxBlob;
+
+        //    Submit result = await xls20client.SubmitTransactionBlob(request);
+        //    Assert.IsNotNull(result);
+        //    Assert.AreEqual("tesSUCCESS", result.EngineResult);
+        //    Assert.IsNotNull(result.Transaction.Hash);
+
+        //}
 
     }
 }

@@ -7,28 +7,16 @@ using RippleDotNet.Responses.Transaction.Interfaces;
 
 namespace RippleDotNet.Responses.Transaction.TransactionTypes
 {
-    public class OfferCreateTransactionResponse : TransactionResponseCommon, IOfferCreateTransaction
+    public class NFTokenMintTransactionResponse : TransactionResponseCommon, INFTokenMintTransaction
     {
-        [JsonConverter(typeof(RippleDateTimeConverter))]
-        public DateTime? Expiration { get; set; }
+        public NFTokenMintFlags? Flags { get; set; }
 
-        public OfferCreateFlags? Flags { get; set; }
+        public uint? TokenTaxon { get; set; }
 
-        /// <summary>
-        /// An offer to delete first, specified in the same way as OfferCancel.
-        /// </summary>
-        public uint? OfferSequence { get; set; }
+        public string Issuer { get; set; }
 
-        /// <summary>
-        /// The amount and type of currency being provided by the offer creator.
-        /// </summary>
-        [JsonConverter(typeof(CurrencyConverter))]
-        public Currency TakerGets { get; set; }
+        public uint? TransferFee { get; set; }
 
-        /// <summary>
-        /// The amount and type of currency being requested by the offer creator.
-        /// </summary>
-        [JsonConverter(typeof(CurrencyConverter))]
-        public Currency TakerPays { get; set; }
+        public string URI { get; set; }
     }
 }

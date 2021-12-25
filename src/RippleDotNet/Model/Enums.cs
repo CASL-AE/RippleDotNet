@@ -20,7 +20,12 @@ namespace RippleDotNet.Model
         PaymentChannelClaim,
         EnableAmendment,
         SetFee,
-        AccountDelete
+        AccountDelete,
+        NFTokenMint,
+        NFTokenBurn,
+        NFTokenCreateOffer,
+        NFTokenCancelOffer,
+        NFTokenAcceptOffer
     }
 
     public enum LedgerEntryType
@@ -163,6 +168,21 @@ namespace RippleDotNet.Model
         tfFillOrKill = 262144,
         tfSell = 524288,
         tfFullyCanonicalSig = 2147483648
+    }
+
+    [Flags]
+    public enum NFTokenMintFlags : uint
+    {
+        tfBurnable = 1,
+        tfOnlyXRP = 2,
+        tfTrustLine = 3,
+        tfTransferable = 4
+    }
+
+    [Flags]
+    public enum NFTokenCreateOfferFlags : uint
+    {
+        tfSellToken = 1
     }
 
     [Flags]

@@ -3,8 +3,8 @@ using RippleDotNet.Responses.Transaction.Interfaces;
 
 namespace RippleDotNet.Responses.Transaction.TransactionTypes
 {
-    public class OfferCancelTransactionResponse : TransactionResponseCommon, IOfferCancelTransaction
+    public class NFTokenCancelOfferTransactionResponse : TransactionResponseCommon, INFTokenCancelOfferTransaction
     {
-        public uint OfferSequence { get; set; }
+        public string[] TokenOffers { get; set; }
     }
 }

@@ -9,5 +9,6 @@ namespace RippleDotNet.Model.Transaction.Interfaces
         uint? OfferSequence { get; set; }
         Currency TakerGets { get; set; }
         Currency TakerPays { get; set; }
+
     }
 }

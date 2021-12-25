@@ -5,21 +5,15 @@ using RippleDotNet.Model.Transaction.Interfaces;
 
 namespace RippleDotNet.Model.Transaction.TransactionTypes
 {
-    public class NFTokenMintTransaction : TransactionCommon, INFTokenMintTransaction
+    public class NFTokenBurnTransaction : TransactionCommon, INFTokenBurnTransaction
     {
-        public NFTokenMintTransaction()
+        public NFTokenBurnTransaction()
         {
-            TransactionType = TransactionType.NFTokenMint;
+            TransactionType = TransactionType.NFTokenBurn;
         }
 
-        public new NFTokenMintFlags? Flags { get; set; }
+        //public string Account { get; set; } // INHEIRTED FROM COMMON
 
-        public uint? TokenTaxon { get; set; }
-
-        public string Issuer { get; set; }
-
-        public uint? TransferFee { get; set; }
-
-        public string URI { get; set; }
+        public string TokenID { get; set; }
     }
 }

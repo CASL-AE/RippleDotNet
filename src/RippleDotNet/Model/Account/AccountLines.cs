@@ -8,7 +8,7 @@ namespace RippleDotNet.Model.Account
         [JsonProperty("account")]
         public string Account { get; set; }
 
-        [JsonProperty("lines")]
+        [JsonProperty("account_nfts")]
         public List<TrustLine> TrustLines { get; set; }
 
         [JsonProperty("ledger_current_index")]

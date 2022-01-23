@@ -62,6 +62,14 @@ namespace RippleDotNet
 
         Task<AccountOffers> AccountOffers(AccountOffersRequest request);
 
+        Task<NFTBuyOffers> NFTBuyOffers(string tokenid);
+
+        Task<NFTBuyOffers> NFTBuyOffers(NFTBuyOffersRequest request);
+
+        Task<NFTSellOffers> NFTSellOffers(string tokenid);
+
+        Task<NFTSellOffers> NFTSellOffers(NFTSellOffersRequest request);
+
         /// <summary>
         /// The AccountObjects command returns the raw ledger format for all objects owned by an account. For a higher-level view of an account's trust lines and balances, see <see cref="Model.Account.AccountLines"/> instead.
         /// </summary>
@@ -75,6 +83,10 @@ namespace RippleDotNet
         /// <param name="request"></param>
         /// <returns>An <see cref="Model.Account.AccountObjects"/> response.</returns>
         Task<AccountObjects> AccountObjects(AccountObjectsRequest request);
+
+        Task<AccountNFTs> AccountNFTs(string account);
+
+        Task<AccountNFTs> AccountNFTs(AccountNFTsRequest request);
 
         Task<AccountTransactions> AccountTransactions(string account);
 
@@ -276,6 +288,50 @@ namespace RippleDotNet
             return task.Task;
         }
 
+        public Task<NFTBuyOffers> NFTBuyOffers(string tokenid)
+        {
+            NFTBuyOffersRequest request = new NFTBuyOffersRequest(tokenid);
+            return NFTBuyOffers(request);
+        }
+
+        public Task<NFTBuyOffers> NFTBuyOffers(NFTBuyOffersRequest request)
+        {
+            var command = JsonConvert.SerializeObject(request, serializerSettings);
+            TaskCompletionSource<NFTBuyOffers> task = new TaskCompletionSource<NFTBuyOffers>();
+
+            TaskInfo taskInfo = new TaskInfo();
+            taskInfo.TaskId = request.Id;
+            taskInfo.TaskCompletionResult = task;
+            taskInfo.Type = typeof(NFTBuyOffers);
+
+            tasks.TryAdd(request.Id, taskInfo);
+
+            client.SendMessage(command);
+            return task.Task;
+        }
+
+        public Task<NFTSellOffers> NFTSellOffers(string tokenid)
+        {
+            NFTSellOffersRequest request = new NFTSellOffersRequest(tokenid);
+            return NFTSellOffers(request);
+        }
+
+        public Task<NFTSellOffers> NFTSellOffers(NFTSellOffersRequest request)
+        {
+            var command = JsonConvert.SerializeObject(request, serializerSettings);
+            TaskCompletionSource<NFTSellOffers> task = new TaskCompletionSource<NFTSellOffers>();
+
+            TaskInfo taskInfo = new TaskInfo();
+            taskInfo.TaskId = request.Id;
+            taskInfo.TaskCompletionResult = task;
+            taskInfo.Type = typeof(NFTSellOffers);
+
+            tasks.TryAdd(request.Id, taskInfo);
+
+            client.SendMessage(command);
+            return task.Task;
+        }
+
         public Task<AccountObjects> AccountObjects(string account)
         {
             AccountObjectsRequest request = new AccountObjectsRequest(account);
@@ -292,6 +348,28 @@ namespace RippleDotNet
             taskInfo.TaskCompletionResult = task;
             taskInfo.Type = typeof(AccountObjects);
             
+            tasks.TryAdd(request.Id, taskInfo);
+
+            client.SendMessage(command);
+            return task.Task;
+        }
+
+        public Task<AccountNFTs> AccountNFTs(string account)
+        {
+            AccountNFTsRequest request = new AccountNFTsRequest(account);
+            return AccountNFTs(request);
+        }
+
+        public Task<AccountNFTs> AccountNFTs(AccountNFTsRequest request)
+        {
+            var command = JsonConvert.SerializeObject(request, serializerSettings);
+            TaskCompletionSource<AccountNFTs> task = new TaskCompletionSource<AccountNFTs>();
+
+            TaskInfo taskInfo = new TaskInfo();
+            taskInfo.TaskId = request.Id;
+            taskInfo.TaskCompletionResult = task;
+            taskInfo.Type = typeof(AccountNFTs);
+
             tasks.TryAdd(request.Id, taskInfo);
 
             client.SendMessage(command);

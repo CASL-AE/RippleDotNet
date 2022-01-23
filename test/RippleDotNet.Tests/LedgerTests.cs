@@ -11,22 +11,30 @@ namespace RippleDotNet.Tests
     public class LedgerTests
     {
         private static IRippleClient client;
+        private static IRippleClient xls20client;
+
         private static string serverUrl = "wss://s1.ripple.com:443";
         //private static string serverUrl = "wss://s.altnet.rippletest.net:51233";
+        private static string xls20Url = "wss://xls20-sandbox.rippletest.net:51233";
 
         [ClassInitialize]
         public static void MyClassInitialize(TestContext testContext)
         {
             client = new RippleClient(serverUrl);
             client.Connect();
+
+            xls20client = new RippleClient(xls20Url);
+            xls20client.Connect();
         }
 
         [TestMethod]
         public async Task CanGetLedger()
         {
             var request = new LedgerRequest {LedgerIndex = new LedgerIndex(LedgerIndexType.Validated), Transactions = true, Expand = true, Binary = true};
-            
+
             var ledger = await client.Ledger(request);
+
+            Assert.AreNotEqual(ledger.LedgerEntity.Transactions.Count, 0);
             Assert.IsNotNull(ledger);
         }
 
@@ -62,6 +70,7 @@ namespace RippleDotNet.Tests
             request.LedgerHash = closedLedger.LedgerHash;
             request.Binary = true;
             var ledgerData = await client.LedgerData(request);
+            //ledgerData.State;
             Assert.IsNotNull(ledgerData);
         }
 

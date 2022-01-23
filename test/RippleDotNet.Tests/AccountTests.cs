@@ -14,12 +14,15 @@ namespace RippleDotNet.Tests
     [TestClass]
     public class AccountTests
     {
-        private static IRippleClient client;
         private static string account;
-        
-        private static string serverUrl = "wss://s.altnet.rippletest.net:51233";
+        private static string xls20Account = "rYTGjwGcbGRgxrdL3jBy62jnWtdV8UUmh";
+
+        private static IRippleClient client;
+        private static IRippleClient xls20client;
+
         //private static string serverUrl = "wss://s1.ripple.com:443";
-        //private static string serverUrl = "wss://s2.ripple.com:443";
+        private static string serverUrl = "wss://s.altnet.rippletest.net:51233";
+        private static string xls20Url = "wss://xls20-sandbox.rippletest.net:51233";
 
 
         [ClassInitialize]
@@ -27,6 +30,9 @@ namespace RippleDotNet.Tests
         {
             client = new RippleClient(serverUrl);
             client.Connect();
+
+            xls20client = new RippleClient(xls20Url);
+            xls20client.Connect();
 
             string faucetUrl = "https://faucet.altnet.rippletest.net/accounts";
             AccountResponse result = await faucetUrl.PostAsync().ReceiveJson<AccountResponse>();
@@ -65,6 +71,13 @@ namespace RippleDotNet.Tests
         {
             var accountLines = await client.AccountLines(account);
             Assert.IsNotNull(accountLines);           
+        }
+
+        [TestMethod]
+        public async Task CanGetAccountNFTs()
+        {
+            AccountNFTs accountNfts = await xls20client.AccountNFTs(xls20Account);
+            Assert.AreNotEqual(accountNfts.NFTs.Count, 0);
         }
 
         [TestMethod]

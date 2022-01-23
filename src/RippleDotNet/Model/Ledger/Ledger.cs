@@ -11,7 +11,7 @@ namespace RippleDotNet.Model.Ledger
     {
         [JsonProperty("ledger")]
         [JsonConverter(typeof(LedgerBinaryConverter))]
-        public BaseLedgerEntity LedgerEntity { get; set; }
+        public LedgerEntity LedgerEntity { get; set; }
 
         [JsonProperty("queue_data")]
         public List<QueuedTransaction> QueueData { get; set; }

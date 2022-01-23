@@ -235,7 +235,7 @@ namespace RippleDotNet
                     CallOnMessage(byteResult);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 //CallOnDisconnected();
                 Disconnect();

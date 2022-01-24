@@ -12,7 +12,7 @@ namespace RippleDotNet.Model.Account
         public List<NFTOffer> Offers { get; set; }
 
         [JsonProperty("tokenid")]
-        public string TokenId { get; set; }
+        public string TokenID { get; set; }
     }
 
     // public class NFTOffer...

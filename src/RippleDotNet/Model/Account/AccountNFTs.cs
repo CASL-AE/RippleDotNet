@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using RippleDotNet.Extensions;
 
 namespace RippleDotNet.Model.Account
 {
@@ -33,11 +34,20 @@ namespace RippleDotNet.Model.Account
         [JsonProperty("issuer")]
         public string Issuer { get; set; }
 
-        [JsonProperty("token_id")]
+        [JsonProperty("tokenid")]
         public string TokenID { get; set; }
 
         [JsonProperty("token_taxon")]
-        public string TokenTaxon { get; set; }
+        public uint TokenTaxon { get; set; }
+
+        [JsonProperty("uri")]
+        public string URI { get; set; }
+
+        [JsonIgnore]
+        public string URIAsString => URI.FromHexString();
+
+        [JsonProperty("transaction_fee")]
+        public uint TransactionFee { get; set; }
 
         [JsonProperty("nft_serial")]
         public string NFTSerial { get; set; }

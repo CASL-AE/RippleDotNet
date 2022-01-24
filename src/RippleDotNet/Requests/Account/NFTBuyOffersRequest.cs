@@ -6,11 +6,11 @@ namespace RippleDotNet.Requests.Account
     {
         public NFTBuyOffersRequest(string tokenid)
         {
-            TokenId = tokenid;
-            Command = "nft_sell_offers";
+            TokenID = tokenid;
+            Command = "nft_buy_offers";
         }
 
         [JsonProperty("tokenid")]
-        public string TokenId { get; set; }
+        public string TokenID { get; set; }
     }
 }

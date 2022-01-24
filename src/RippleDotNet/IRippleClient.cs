@@ -32,6 +32,8 @@ namespace RippleDotNet
 
         Task Ping();
 
+        Task Subscribe();
+
         Task<AccountCurrencies> AccountCurrencies(string account);
 
         Task<AccountCurrencies> AccountCurrencies(AccountCurrenciesRequest request);
@@ -174,6 +176,25 @@ namespace RippleDotNet
             
             tasks.TryAdd(request.Id, taskInfo);
             
+            client.SendMessage(command);
+            return task.Task;
+        }
+
+        public Task Subscribe()
+        {
+            RippleRequest request = new RippleRequest();
+            request.Command = "subscribe";
+
+            var command = JsonConvert.SerializeObject(request, serializerSettings);
+            TaskCompletionSource<object> task = new TaskCompletionSource<object>();
+
+            TaskInfo taskInfo = new TaskInfo();
+            taskInfo.TaskId = request.Id;
+            taskInfo.TaskCompletionResult = task;
+            taskInfo.Type = typeof(object);
+
+            tasks.TryAdd(request.Id, taskInfo);
+
             client.SendMessage(command);
             return task.Task;
         }

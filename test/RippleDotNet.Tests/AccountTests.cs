@@ -7,6 +7,7 @@ using Ripple.Core.Types;
 using RippleDotNet.Model;
 using RippleDotNet.Model.Account;
 using RippleDotNet.Requests.Account;
+using System;
 
 
 namespace RippleDotNet.Tests
@@ -16,6 +17,8 @@ namespace RippleDotNet.Tests
     {
         private static string account;
         private static string xls20Account = "rYTGjwGcbGRgxrdL3jBy62jnWtdV8UUmh";
+
+        private static string tokenid = "";
 
         private static IRippleClient client;
         private static IRippleClient xls20client;
@@ -85,6 +88,20 @@ namespace RippleDotNet.Tests
         {
             var accountOffers = await client.AccountOffers(account);
             Assert.IsNotNull(accountOffers);
+        }
+
+        [TestMethod]
+        public async Task CanGetNFTBuyOffers()
+        {
+            var nftBuyOffers = await xls20client.NFTBuyOffers(tokenid);
+            Assert.IsNotNull(nftBuyOffers);
+        }
+
+        [TestMethod]
+        public async Task CanGetNFTSellOffers()
+        {
+            var nftSellOffers = await xls20client.NFTSellOffers(tokenid);
+            Assert.IsNotNull(nftSellOffers);
         }
 
         [TestMethod]

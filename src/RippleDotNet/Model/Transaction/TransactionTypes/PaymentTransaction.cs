@@ -10,7 +10,6 @@ namespace RippleDotNet.Model.Transaction.TransactionTypes
         public PaymentTransaction()
         {
             TransactionType = TransactionType.Payment;
-            Flags = PaymentFlags.tfFullyCanonicalSig;
         }
 
         [JsonConverter(typeof(CurrencyConverter))]

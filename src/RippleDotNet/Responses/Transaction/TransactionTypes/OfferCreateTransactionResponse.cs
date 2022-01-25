@@ -12,7 +12,7 @@ namespace RippleDotNet.Responses.Transaction.TransactionTypes
         [JsonConverter(typeof(RippleDateTimeConverter))]
         public DateTime? Expiration { get; set; }
 
-        public OfferCreateFlags? Flags { get; set; }
+        public new OfferCreateFlags? Flags { get; set; }
 
         /// <summary>
         /// An offer to delete first, specified in the same way as OfferCancel.

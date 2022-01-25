@@ -10,7 +10,6 @@ namespace RippleDotNet.Model.Transaction.TransactionTypes
         public AccountDeleteTransaction()
         {
             TransactionType = TransactionType.AccountDelete;
-            Flags = AccountDeleteFlags.tfFullyCanonicalSig;
         }
 
         [JsonConverter(typeof(CurrencyConverter))]
@@ -20,7 +19,7 @@ namespace RippleDotNet.Model.Transaction.TransactionTypes
 
         public uint? DestinationTag { get; set; }
 
-        public new AccountDeleteFlags? Flags { get; set; }
+        //public new AccountDeleteFlags? Flags { get; set; }
 
         public string InvoiceId { get; set; }
 

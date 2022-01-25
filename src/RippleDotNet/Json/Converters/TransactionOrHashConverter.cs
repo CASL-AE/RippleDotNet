@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using RippleDotNet.Model.Ledger;
 using RippleDotNet.Model.Transaction.TransactionTypes;
+using RippleDotNet.Responses.Transaction.TransactionTypes;
 
 namespace RippleDotNet.Json.Converters
 {
@@ -16,13 +17,14 @@ namespace RippleDotNet.Json.Converters
         {
             HashOrTransaction hashOrTransaction = new HashOrTransaction();
 
+
             if (reader.TokenType == JsonToken.String)
             {
                 hashOrTransaction.TransactionHash = reader.Value.ToString();                
             }
             else
             {
-                hashOrTransaction.Transaction = serializer.Deserialize<TransactionCommon>(reader);
+                hashOrTransaction.Transaction = serializer.Deserialize<TransactionResponseCommon>(reader);
             }
             
             return hashOrTransaction;

@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
+using System.Collections.Generic;
 
-namespace RippleDotNet.Requests.Subscription
+namespace RippleDotNet.Requests.Ledger
 {
     public class SubscribeRequest : RippleRequest
     {
@@ -8,5 +9,8 @@ namespace RippleDotNet.Requests.Subscription
         {
             Command = "subscribe";
         }
+
+        [JsonProperty("streams")]
+        public List<string> Streams { get; set; }
     }
 }

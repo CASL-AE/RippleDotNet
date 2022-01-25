@@ -12,7 +12,7 @@ using RippleDotNet.Responses.Transaction.Interfaces;
 namespace RippleDotNet.Responses.Transaction.TransactionTypes
 {
     [JsonConverter(typeof(TransactionConverter))]
-    public abstract class TransactionResponseCommon : BaseTransactionResponse, ITransactionCommon, ITransactionResponseCommon
+    public abstract class   TransactionResponseCommon : BaseTransactionResponse, ITransactionCommon, ITransactionResponseCommon
     {
         public string Account { get; set; }
 
@@ -21,7 +21,7 @@ namespace RippleDotNet.Responses.Transaction.TransactionTypes
         [JsonConverter(typeof(CurrencyConverter))]
         public Currency Fee { get; set; }
 
-        public TransactionFlags? Flags { get; set; }
+        public uint? Flags { get; set; }
 
         /// <summary>
         /// Although optional, the LastLedgerSequence is strongly recommended on every transaction to ensure it's validated or rejected promptly.
@@ -43,7 +43,7 @@ namespace RippleDotNet.Responses.Transaction.TransactionTypes
         [JsonProperty("TxnSignature")]
         public string TransactionSignature { get; set; }
 
-        [JsonProperty("meta")]
+        [JsonProperty("metaData")]
         public Meta Meta { get; set; }
 
         public string ToJson()

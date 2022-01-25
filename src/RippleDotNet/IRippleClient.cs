@@ -30,9 +30,11 @@ namespace RippleDotNet
 
         void Disconnect();
 
-        Task Ping();
+        Task<object> Subscribe();
 
-        Task Subscribe();
+        Task<object> Subscribe(SubscribeRequest request);
+
+        Task Ping();
 
         Task<AccountCurrencies> AccountCurrencies(string account);
 
@@ -144,11 +146,12 @@ namespace RippleDotNet
             
             client = WebSocketClient.Create(url);
             client.OnMessageReceived(MessageReceived);
-            client.OnConnectionError(Error);            
+            client.OnConnectionError(Error);        
         }
 
         public void Connect()
         {
+            client.OnMessageReceived(MessageReceived);
             client.Connect();
             do
             {
@@ -159,6 +162,30 @@ namespace RippleDotNet
         public void Disconnect()
         {
             client.Disconnect();
+        }
+
+        public Task<object> Subscribe()
+        {
+            SubscribeRequest request = new SubscribeRequest();
+            return Subscribe(request);
+        }
+
+        public Task<object> Subscribe(SubscribeRequest request)
+        {
+
+            var command = JsonConvert.SerializeObject(request, serializerSettings);
+            TaskCompletionSource<object> task = new TaskCompletionSource<object>();
+
+            TaskInfo taskInfo = new TaskInfo();
+            taskInfo.TaskId = request.Id;
+            taskInfo.TaskCompletionResult = task;
+            taskInfo.RemoveUponCompletion = false;
+            taskInfo.Type = typeof(object);
+
+            tasks.TryAdd(request.Id, taskInfo);
+
+            client.SendMessage(command);
+            return task.Task;
         }
 
         public Task Ping()
@@ -176,25 +203,6 @@ namespace RippleDotNet
             
             tasks.TryAdd(request.Id, taskInfo);
             
-            client.SendMessage(command);
-            return task.Task;
-        }
-
-        public Task Subscribe()
-        {
-            RippleRequest request = new RippleRequest();
-            request.Command = "subscribe";
-
-            var command = JsonConvert.SerializeObject(request, serializerSettings);
-            TaskCompletionSource<object> task = new TaskCompletionSource<object>();
-
-            TaskInfo taskInfo = new TaskInfo();
-            taskInfo.TaskId = request.Id;
-            taskInfo.TaskCompletionResult = task;
-            taskInfo.Type = typeof(object);
-
-            tasks.TryAdd(request.Id, taskInfo);
-
             client.SendMessage(command);
             return task.Task;
         }
@@ -623,7 +631,7 @@ namespace RippleDotNet
             TaskCompletionSource<Ledger> task = new TaskCompletionSource<Ledger>();
 
             TaskInfo taskInfo = new TaskInfo();
-            taskInfo.TaskId = request.Id;
+            taskInfo.TaskId = Guid.Parse("1A3B944E-3632-467B-A53A-206305310BAE");
             taskInfo.TaskCompletionResult = task;
             taskInfo.Type = typeof(Ledger);
 
@@ -692,31 +700,43 @@ namespace RippleDotNet
         private void MessageReceived(string s, WebSocketClient client)
         {
             RippleResponse response = JsonConvert.DeserializeObject<RippleResponse>(s);
-
-            var taskInfoResult = tasks.TryGetValue(response.Id, out var taskInfo);
-            if (taskInfoResult == false) throw new Exception("Task not found");
-
-            if (response.Status == "success")
+            try
             {
-                var deserialized = JsonConvert.DeserializeObject(response.Result.ToString(), taskInfo.Type, serializerSettings);
+                var taskInfoResult = tasks.TryGetValue(response.Id, out var taskInfo);
+                if (taskInfoResult == false) throw new Exception("Task not found");
 
-                var setResult = taskInfo.TaskCompletionResult.GetType().GetMethod("SetResult");
-                setResult.Invoke(taskInfo.TaskCompletionResult, new[] { deserialized });
-
-                if (taskInfo.RemoveUponCompletion)
+                if (response.Status == "success")
                 {
+                    var deserialized = JsonConvert.DeserializeObject(response.Result.ToString(), taskInfo.Type, serializerSettings);
+                    var setResult = taskInfo.TaskCompletionResult.GetType().GetMethod("SetResult");
+                    setResult.Invoke(taskInfo.TaskCompletionResult, new[] { deserialized });
+
+                    if (taskInfo.RemoveUponCompletion)
+                    {
+                        tasks.TryRemove(response.Id, out taskInfo);
+                    }
+                }
+                else if (response.Status == "error")
+                {
+                    var setException = taskInfo.TaskCompletionResult.GetType().GetMethod("SetException", new Type[] { typeof(Exception) }, null);
+
+                    RippleException exception = new RippleException(response.Error);
+                    setException.Invoke(taskInfo.TaskCompletionResult, new[] { exception });
+
                     tasks.TryRemove(response.Id, out taskInfo);
                 }
             }
-            else if (response.Status == "error")
+            catch (Exception e)
             {
-                var setException = taskInfo.TaskCompletionResult.GetType().GetMethod("SetException", new Type[]{typeof(Exception)}, null);
+                Console.WriteLine(e);
+                var taskInfoResult = tasks.TryGetValue(response.Id, out var taskInfo);
+                var setException = taskInfo.TaskCompletionResult.GetType().GetMethod("SetException", new Type[] { typeof(Exception) }, null);
 
                 RippleException exception = new RippleException(response.Error);
                 setException.Invoke(taskInfo.TaskCompletionResult, new[] { exception });
 
                 tasks.TryRemove(response.Id, out taskInfo);
-            }                        
-        }        
+            }                  
+        }
     }
 }

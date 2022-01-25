@@ -17,7 +17,7 @@ namespace RippleDotNet.Json.Converters
         public ITransactionResponseCommon Create(Type objectType, JObject jObject)
         {
             JProperty transactionType = jObject.Property("TransactionType");
-            
+
             switch (transactionType.Value.ToString())
             {
                 case "AccountSet":

@@ -16,7 +16,7 @@ namespace RippleDotNet.Responses.Transaction.TransactionTypes
 
         public uint? DestinationTag { get; set; }
 
-        public PaymentFlags? Flags { get; set; }
+        public new PaymentFlags? Flags { get; set; }
 
         public string InvoiceId { get; set; }
 

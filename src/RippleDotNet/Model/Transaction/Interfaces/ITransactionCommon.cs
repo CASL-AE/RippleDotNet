@@ -11,7 +11,7 @@ namespace RippleDotNet.Model.Transaction.Interfaces
 
         Currency Fee { get; set; }
 
-        TransactionFlags? Flags { get; set; }
+        uint? Flags { get; set; }
 
         uint? LastLedgerSequence { get; set; }
 

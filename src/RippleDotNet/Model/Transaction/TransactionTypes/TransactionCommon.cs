@@ -12,7 +12,7 @@ namespace RippleDotNet.Model.Transaction.TransactionTypes
     {
         protected TransactionCommon()
         {
-            Fee = new Currency {Value = "10"};
+            Fee = new Currency { Value = "10" };
         }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace RippleDotNet.Model.Transaction.TransactionTypes
         [JsonConverter(typeof(CurrencyConverter))]
         public Currency Fee { get; set; }
 
-        public TransactionFlags? Flags { get; set; }
+        public uint? Flags { get; set; }
 
         /// <summary>
         /// Although optional, the LastLedgerSequence is strongly recommended on every transaction to ensure it's validated or rejected promptly.
@@ -50,7 +50,7 @@ namespace RippleDotNet.Model.Transaction.TransactionTypes
         [JsonProperty("TxnSignature")]
         public string TransactionSignature { get; set; }
 
-        [JsonProperty("meta")]
+        [JsonProperty("metaData")]
         public Meta Meta { get; set; }      
 
         public string ToJson()

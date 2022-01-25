@@ -117,24 +117,11 @@ namespace RippleDotNet.Model
     }
 
     [Flags]
-    public enum TransactionFlags : uint
-    {        
-        tfFullyCanonicalSig = 2147483648
-    }
-
-    [Flags]
     public enum PaymentFlags : uint
     {
         tfNoDirectRipple = 65536,
         tfPartialPayment = 131072,
         tfLimitQuality = 262144,
-        tfFullyCanonicalSig = 2147483648
-    }
-    
-    [Flags]
-    public enum AccountDeleteFlags : uint
-    {
-        tfFullyCanonicalSig = 2147483648
     }
 
     public enum AccountSetFlags
@@ -156,8 +143,7 @@ namespace RippleDotNet.Model
         tfSetNoRipple = 131072,
         tfClearNoRipple = 262144,
         tfSetFreeze = 1048576,
-        tfClearFreeze = 2097152,
-        tfFullyCanonicalSig = 2147483648
+        tfClearFreeze = 2097152
     }
 
     [Flags]
@@ -166,8 +152,7 @@ namespace RippleDotNet.Model
         tfPassive = 65536,
         tfImmediateOrCancel = 131072,
         tfFillOrKill = 262144,
-        tfSell = 524288,
-        tfFullyCanonicalSig = 2147483648
+        tfSell = 524288
     }
 
     [Flags]
@@ -189,8 +174,7 @@ namespace RippleDotNet.Model
     public enum PaymentChannelClaimFlags : uint
     {
         tfRenew = 65536,
-        tfClose = 131072,
-        tfFullyCanonicalSig = 2147483648
+        tfClose = 131072
     }
 
     public enum EnableAmendmentFlags

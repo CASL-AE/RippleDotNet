@@ -7,7 +7,7 @@ namespace RippleDotNet.Model.Transaction.Interfaces
         Currency DeliverMin { get; set; }
         string Destination { get; set; }
         uint? DestinationTag { get; set; }
-        new AccountDeleteFlags? Flags { get; set; }
+        //new AccountDeleteFlags? Flags { get; set; }
         string InvoiceId { get; set; }
         List<List<Path>> Paths { get; set; }
         Currency SendMax { get; set; }

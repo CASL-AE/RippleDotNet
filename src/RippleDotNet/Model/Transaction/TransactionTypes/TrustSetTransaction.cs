@@ -9,7 +9,7 @@ namespace RippleDotNet.Model.Transaction.TransactionTypes
         public TrustSetTransaction()
         {
             TransactionType = TransactionType.TrustSet;
-            Flags = TrustSetFlags.tfFullyCanonicalSig | TrustSetFlags.tfSetNoRipple;
+            Flags = TrustSetFlags.tfSetNoRipple;
         }
 
         public new TrustSetFlags? Flags { get; set; }

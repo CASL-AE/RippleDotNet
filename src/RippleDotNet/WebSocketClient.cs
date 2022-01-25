@@ -11,7 +11,7 @@ namespace RippleDotNet
     internal class WebSocketClient : IDisposable
     {
 
-        private const int ReceiveChunkSize = 1024;
+        private const int ReceiveChunkSize = 1048576;
         private const int SendChunkSize = 1024;
 
         private ClientWebSocket _ws;

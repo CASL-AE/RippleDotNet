@@ -9,7 +9,7 @@ namespace RippleDotNet.Responses.Transaction.TransactionTypes
 {
     public class NFTokenMintTransactionResponse : TransactionResponseCommon, INFTokenMintTransaction
     {
-        public NFTokenMintFlags? Flags { get; set; }
+        public new NFTokenMintFlags? Flags { get; set; }
 
         public uint? TokenTaxon { get; set; }
 
